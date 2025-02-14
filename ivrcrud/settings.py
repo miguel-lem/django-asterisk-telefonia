@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'mensajesprojects',
     'llamadasproject',
     'audiosproject',
+    'django_extensions',
     'rest_framework'
 ]
 

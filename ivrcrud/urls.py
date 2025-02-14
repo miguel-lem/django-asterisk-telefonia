@@ -30,5 +30,6 @@ urlpatterns = [
     #le colo los urls del otro directorio el de mensajes
     path('api/mensajes/',include('mensajesprojects.urls')),
     #le coloco el otro directorio, el de llamadas
-    path('api/llamadas/',include('llamadasproject.urls')) 
+    path('api/llamadas/',include('llamadasproject.urls')), 
+    path('api/audios/',include('audiosproject.urls')) 
 ] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
