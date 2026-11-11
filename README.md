@@ -113,17 +113,6 @@ En Asterisk, habilita AMI en `manager.conf` con un usuario que tenga permisos `o
 
 ## Problemas conocidos
 
-Hallazgos del análisis del código:
-
-1. **`llamadasproject/views.py` no se puede importar**: hay un bloque `'''...'''` mal indentado (línea ~188) justo después de `download_audio`, lo que provoca `SyntaxError` y rompe todo el proyecto al cargar las URLs.
-2. **`LlamadasEnviarAudio`**: `download_audio` no tiene `self` y se llama sin él; además borra el archivo temporal (`os.remove`) *antes* de enviar el `Originate`, y escribe en una ruta de Asterisk (`/var/lib/asterisk/sounds`) que no existe en el servidor Django salvo que sea la misma máquina. Además hace una petición HTTP a su propio servidor.
-3. **`AudioProcessor.convertir_audio`**: ffmpeg escribe en `nueva_ruta` (nombre aleatorio) pero luego lee `output_path` (nombre fijo), por lo que falla o devuelve un archivo antiguo. Tampoco usa `-y`, y la ruta es de una máquina Windows concreta.
-4. **Seguridad**: `SECRET_KEY`, contraseña de PostgreSQL y credenciales AMI están en el código; `DEBUG = True`, `ALLOWED_HOSTS = ['*']` y los endpoints usan `AllowAny` sin autenticación. Cualquiera con acceso a la red podría originar llamadas. Se recomienda mover los secretos a variables de entorno y proteger la API.
-5. `MensajeSerializer` usa `ready_only_fields` (typo de `read_only_fields`), así que `fecha_ingreso` no queda realmente como solo lectura.
-6. `escuchar_audio` guarda con extensión `.mp3` pero `pyttsx3` genera WAV; además usa un archivo `output.mp3` compartido (condición de carrera con peticiones concurrentes).
-7. El texto de `crear_audio_get` está fijo en el código; el cliente `AMIClient` se conecta y desconecta por cada petición.
-8. El repo incluye `__pycache__`, `db.sqlite3` y un archivo vacío `ivruno`; faltan `requirements.txt` y `.gitignore`. Los modelos de `llamadasproject` y `audiosproject` están vacíos (no hay registro de llamadas).
-9. `mensajesprojects/apy.py` probablemente quiso llamarse `api.py`.
 
 ## Ideas de mejora
 
